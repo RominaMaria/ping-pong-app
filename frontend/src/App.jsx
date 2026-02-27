@@ -4,7 +4,7 @@ import VoteForm from './VoteForm' // 1. We import your new component
 
 function App() {
   const [votes, setVotes] = useState([])
-
+  const API_BASE_URL = "https://ping-pong-app.onrender.com";
   // 2. This is the function we will give to the VoteForm
   const fetchVotes = async () => {
     try {

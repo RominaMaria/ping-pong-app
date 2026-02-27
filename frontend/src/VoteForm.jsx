@@ -2,6 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 
 function VoteForm({ onVoteSuccess }) {
+  const API_BASE_URL = "https://ping-pong-app.onrender.com";
   // Memory for the form
   const [name, setName] = useState('')
   const [note, setNote] = useState('')
@@ -33,7 +34,7 @@ function VoteForm({ onVoteSuccess }) {
 
     try {
       // POST the data to your backend
-      await axios.post('http://127.0.0.1:8000/vote', newVote)
+      await axios.post(`${API_BASE_URL}/vote`, newVote)
       
       // Clear the form and refresh the parent list
       setName('')
