@@ -11,9 +11,10 @@ app = FastAPI()
 # This tells FastAPI: "It's okay to let the Frontend talk to me"
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, we'd be more specific
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"], # The "Open Door" policy
+    allow_credentials=True,
+    allow_methods=["*"], # Allows GET, POST, etc.
+    allow_headers=["*"], # Allows all types of data
 )
 votes = load_votes() #Memory (votes variable) → for performance and API
 

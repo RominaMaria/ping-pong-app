@@ -1169,3 +1169,25 @@ so don't freeze the whole page. Just run this in the background."
 
 The Tool (await): Inside an async function, you put await before the actual request. 
 It tells the code: "Pause this specific function until the backend answers, then continue."
+
+
+
+Command,What it actually does
+git init,"""Wakes up"" Git in your folder. Creates the hidden memory."
+git status,"Shows you which files are ""Red"" (not saved) or ""Green"" (ready)."
+git add .,"The ""Staging"" step. Packs all your files into a box."
+"git commit -m ""Message""","The ""Snapshot."" Saves the box with a specific label/date."
+git branch -M main,Renames your timeline to main (to match GitHub).
+git remote add origin [URL],"Builds the ""Bridge"" between your PC and your GitHub account."
+git push -u origin main,"The ""Upload."" Sends your snapshots across the internet."
+
+🏛️ The "Don't Forget" Rules
+The .gitignore is your Shield: Always create this before your first git add .. If you forget, you will upload 5,000 files of junk (node_modules) and your computer will get very slow!
+
+The "Add-Commit-Push" Cycle: In the future, every time you finish a new feature (like a new CSS button or a Python route), you only need these three:
+
+git add .
+
+git commit -m "Added a cool button"
+
+git push
