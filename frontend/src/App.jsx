@@ -9,7 +9,7 @@ function App() {
   const fetchVotes = async () => {
     try {
       // Adding ?t=... makes the URL unique so the browser doesn't use a "saved" version
-      const response = await axios.get(`http://127.0.0.1:8000/votes/recent?t=${Date.now()}`)
+      const response = await axios.get(`${API_BASE_URL}/votes/recent?t=${Date.now()}`)
       
       // We sort them so the newest (highest ID or latest time) is at the TOP
       const sortedData = response.data.sort((a, b) => b.id - a.id)
@@ -24,7 +24,7 @@ function App() {
   const [stats, setStats] = useState({})
   const fetchStats = async() => {
     try{
-      const response = await axios.get(`http://127.0.0.1:8000/votes/stats`);
+      const response = await axios.get(`${API_BASE_URL}/votes/stats`);
       
       setStats(response.data);
     } catch (error){
@@ -35,7 +35,7 @@ function App() {
   const [notes, setNotes] = useState([])
   const fetchNotes = async() => {
     try{
-      const response = await axios.get(`http://127.0.0.1:8000/votes/notes`);
+      const response = await axios.get(`${API_BASE_URL}/votes/notes`);
       const cleanNotes = response.data.filter(n => n !== null && n !== "")
       const sortedNotes = cleanNotes.data.sort((a,b) => b.length - a.length)
       setNotes(sortedNotes);
@@ -46,7 +46,7 @@ function App() {
 
   const deactivatePlayer = async (vote_id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/players/deactivate/${vote_id}`);
+      await axios.delete(`${API_BASE_URL}/players/deactivate/${vote_id}`);
       refreshAllData(); // <--- This makes the name vanish from the screen!
     } catch (error) {
       alert(error.response?.data?.detail || "Delete failed");
@@ -60,7 +60,7 @@ function App() {
   if (newName && newName !== oldName) {
     try {
       // Notice: old_name is in the PATH, new_name is a QUERY (?new_name=...)
-      await axios.put(`http://127.0.0.1:8000/players/rename/${oldName}/${newName}`);
+      await axios.put(`${API_BASE_URL}/players/rename/${oldName}/${newName}`);
       refreshAllData();
     } catch (error) {
       alert(error.response?.data?.detail || "Rename failed");
