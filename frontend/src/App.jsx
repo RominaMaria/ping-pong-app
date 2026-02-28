@@ -37,7 +37,7 @@ function App() {
     try{
       const response = await axios.get(`${API_BASE_URL}/votes/notes`);
       const cleanNotes = response.data.filter(n => n !== null && n !== "")
-      const sortedNotes = cleanNotes.data.sort((a,b) => b.length - a.length)
+      const sortedNotes = cleanNotes.sort((a,b) => b.length - a.length)
       setNotes(sortedNotes);
     } catch (error){
       console.log("Error fetching the notes", error)
