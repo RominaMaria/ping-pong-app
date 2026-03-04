@@ -44,3 +44,6 @@ class Vote(VoteBase):
 
 class SystemMetadata(BaseModel):
     last_id: int = 0
+
+class DayUpdate(BaseModel):
+    new_days: List[str]

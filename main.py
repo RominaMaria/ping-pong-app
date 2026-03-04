@@ -1,10 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from backend.storage import load_votes, save_votes, rename_player, deactivate_player_vote, get_next_id
+from backend.storage import load_votes, save_votes, rename_player, deactivate_player_vote, edit_vote_day
 from backend.leaderboard import enhanced_leaderBoard_plus_summary, user_votes, count_hourly_activity, build_text_chart, collect_all_notes
-from backend.schemas import VoteCreate, Vote
+from backend.schemas import VoteCreate, Vote, DayUpdate
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 from collections import Counter
+from typing import List
+
+
 
 app = FastAPI()
 
@@ -23,7 +26,6 @@ def add_vote(request: VoteCreate):
     try:
         # 1. Load existing data
         all_votes = load_votes() 
-        
         # --- NEW: DUPLICATE CHECK ---
         for existing_vote in all_votes: # existing vote is form the json file and the request vote is from the user frontend
             # Check if name exists (ignoring case) AND is currently active
@@ -83,6 +85,17 @@ def rename_player_endpoit(old_name:str, new_name:str):
     if changed_count == 0:
         raise HTTPException(status_code=404, detail=f"Player {old_name} not found")
     return{"message": f"Successfuly updated {changed_count} votes to {new_name}"}
+
+#Endpoint
+@app.put("/votes/{vote_id}/days")
+def edit_vote(vote_id: int, payload: DayUpdate):
+    count = edit_vote_day(vote_id, payload)
+    if count == 0:
+        raise HTTPException(status_code=404, detail=f"Player {vote_id} not found")
+
+    return {"message": "Successfully updated days", "new_days": payload.new_days}
+
+
 
 @app.delete("/players/deactivate/{vote_id}")
 def deactivate_player_vote_player_endpoint(vote_id: int):

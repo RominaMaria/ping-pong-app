@@ -53,6 +53,31 @@ function App() {
     }
   };
 
+  const editPlayer = async (vote_id, currentDays) => {
+  // 1. Ask the user for input
+  // We show the current days so they know what they are changing
+  const userInput = window.prompt(
+    "Enter new days (separated by commas):", 
+    currentDays.join(", ")
+  );
+  // 2. Only proceed if they didn't click "Cancel"
+  if (userInput !== null){
+    // 3. TRANSFORM: Turn "Monday, Tuesday" into ["Monday", "Tuesday"]
+    const daysArray = userInput.split(",").map(d => d.trim());
+
+    try{
+      // 4. THE AXIOS PUT: 
+      // Argument 1: The URL
+      // Argument 2: THE PACKAGE (The object that matches your DayUpdate class!)
+      await axios.put(`${API_BASE_URL}/votes/${vote_id}/days`,{new_days: daysArray}); // <--- This name MUST match your Python schema!
+      refreshAllData();
+    } catch (error){
+      // If your backend validation fails (e.g. wrong day name), this shows the error
+      allert(error.response?.data?.detail || "Edit failed" );
+    }
+  }  
+  };
+
   const handleRename = async (oldName) => {
   const newName = window.prompt(`Rename "${oldName}" to:`, oldName);
   
@@ -196,7 +221,23 @@ function App() {
           >
             Rename ✏️
           </button>
+          {/* --- RIGHT SIDE: THE ACTION --- */}
+            <button 
+              onClick={() => editPlayer(v.id, v.day)} 
+              style={{ 
+                backgroundColor: '#4dff74', 
+                color: 'white', 
+                border: 'none', 
+                padding: '8px 12px', 
+                borderRadius: '5px', 
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+            >
+              Edit Days
+            </button>
           </div>
+          
         ))}
       </div>
       

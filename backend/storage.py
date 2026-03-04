@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 from typing import List
-from backend.schemas import Vote, SystemMetadata
+from backend.schemas import Vote, SystemMetadata, DayUpdate
 from datetime import datetime
 
 FILE_PATH = "votes.json"
@@ -90,3 +90,21 @@ def deactivate_player_vote(vote_id: int) -> bool:
         save_votes([v.model_dump() for v in all_votes])
     
     return found
+
+
+def edit_vote_day(vote_id: int, payload: DayUpdate):
+    all_votes = load_votes()
+    found = False
+
+    for v in all_votes:
+        if v.id == vote_id:
+            v.day = payload.new_days
+            v.modified_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            found = True
+            break
+    if found:
+        save_votes([v.model_dump() for v in all_votes])
+
+    return found
+
+        
