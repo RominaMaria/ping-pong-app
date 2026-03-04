@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from backend.storage import load_votes, save_votes, rename_player, deactivate_player_vote, edit_vote_day
+from backend.storage import load_votes, save_votes, rename_player, deactivate_player_vote, edit_vote_day, get_next_id
 from backend.leaderboard import enhanced_leaderBoard_plus_summary, user_votes, count_hourly_activity, build_text_chart, collect_all_notes
 from backend.schemas import VoteCreate, Vote, DayUpdate
 from datetime import datetime
@@ -89,11 +89,10 @@ def rename_player_endpoit(old_name:str, new_name:str):
 #Endpoint
 @app.put("/votes/{vote_id}/days")
 def edit_vote(vote_id: int, payload: DayUpdate):
-    count = edit_vote_day(vote_id, payload)
-    if count == 0:
+    success = edit_vote_day(vote_id, payload)
+    if not success:
         raise HTTPException(status_code=404, detail=f"Player {vote_id} not found")
-
-    return {"message": "Successfully updated days", "new_days": payload.new_days}
+    return {"message": "Success", "new_days": payload.new_days}
 
 
 
