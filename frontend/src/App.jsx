@@ -64,11 +64,12 @@ function App() {
   if (userInput !== null){
     // 3. TRANSFORM: Turn "Monday, Tuesday" into ["Monday", "Tuesday"]
     const daysArray = userInput.split(",").map(d => d.trim());
+    const fullUrl = `${API_BASE_URL}/votes/${vote_id}/days`;
+    console.log("Sending data to:", fullUrl); // <--- Check this in the browser console!
+    console.log("Data being sent:", { new_days: daysArray });
 
     try {
-      await axios.put(`${API_BASE_URL}/votes/${vote_id}/days`, {
-        new_days: daysArray 
-      });
+      await axios.put(fullUrl, { new_days: daysArray });
       
       // Wait 500ms for the backend to finish writing the file
       setTimeout(() => {
