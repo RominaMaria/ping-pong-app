@@ -4,6 +4,7 @@ import VoteForm from './VoteForm' // 1. We import your new component
 
 function App() {
   const [votes, setVotes] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
   const API_BASE_URL = "https://ping-pong-app.onrender.com";
   // 2. This is the function we will give to the VoteForm
   const fetchVotes = async () => {
@@ -98,20 +99,50 @@ function App() {
   }
   };
 
+  const refreshAllData = async () => {
+    try{
+      // This starts all 3 requests at the SAME TIME
+      await Promise.all([
+        fetchVotes(),
+        fetchStats(),
+        fetchNotes()
+      ]);
+    } catch (error){
+      console.error("One of the refreshes failed", error);
+    } finally {
+      // Once they are all done, we stop the loading spinner
+      setIsLoading(false);
+    }
+  };
+
+  // 3. Update your useEffect to use the new function
+
   // 3. Run fetchVotes once when the page first loads
   useEffect(() => {
     fetchVotes();
     fetchStats();
     fetchNotes();
-  }, [])
+    refreshAllData();
+  }, []);
 
-  const refreshAllData = ()  =>{
-    fetchVotes();
-    fetchStats();
-    fetchNotes();
-  };
 
   const resume = [...new Set(votes.map(v => v.name))]. join(", ")
+
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100vh' 
+      }}>
+        <h1 style={{ fontSize: '3rem' }}>🏓</h1>
+        <h2>Waking up the Ping-Pong server...</h2>
+        <p>This usually takes 30 seconds on the first load.</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial' }}>
