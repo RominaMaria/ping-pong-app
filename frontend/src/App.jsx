@@ -211,8 +211,15 @@ function App() {
               <div>
                 <strong style={{ fontSize: '1.1rem' }}>{v.name}</strong> 
                 <span style={{ color: '#666', marginLeft: '10px' }}>
+                  {/* 1. Shows the list of days joined by commas */}
                   playing on {v.day.join(', ')}
                 </span>
+              </div>
+
+              {/* 2. Shows the timestamp from the Backend */}
+              <div style={{ fontSize: '0.8rem', color: '#999' }}>
+                voted on {v.created_at} 
+                {v.modified_at && ` (edited: ${v.modified_at})`}
               </div>
               
               {/* Show the note only if it exists */}
@@ -220,7 +227,7 @@ function App() {
                 <p style={{ 
                   margin: 0, 
                   fontStyle: 'italic', 
-                  color: '#555555', 
+                  color: '#555', 
                   fontSize: '0.9rem',
                   borderLeft: '3px solid #007bff',
                   paddingLeft: '10px'
