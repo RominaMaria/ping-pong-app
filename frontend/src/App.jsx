@@ -65,15 +65,19 @@ function App() {
     // 3. TRANSFORM: Turn "Monday, Tuesday" into ["Monday", "Tuesday"]
     const daysArray = userInput.split(",").map(d => d.trim());
 
-    try{
-      // 4. THE AXIOS PUT: 
-      // Argument 1: The URL
-      // Argument 2: THE PACKAGE (The object that matches your DayUpdate class!)
-      await axios.put(`${API_BASE_URL}/votes/${vote_id}/days`,{new_days: daysArray}); // <--- This name MUST match your Python schema!
-      refreshAllData();
-    } catch (error){
-      // If your backend validation fails (e.g. wrong day name), this shows the error
-      allert(error.response?.data?.detail || "Edit failed" );
+    try {
+      await axios.put(`${API_BASE_URL}/votes/${vote_id}/days`, {
+        new_days: daysArray 
+      });
+      
+      // Wait 500ms for the backend to finish writing the file
+      setTimeout(() => {
+        refreshAllData();
+      }, 500);
+
+    } catch (error) {
+      console.error("Full error object:", error); // Check your console!
+      alert(error.response?.data?.detail || "Edit failed");
     }
   }  
   };
